@@ -122,7 +122,7 @@ def main():
     # Request file path from the user or to type a password hash
     while(1):
         user_input = input(
-            "\nGive a filepath by typing 'filepath' or give a hashed password by typing 'password': ")
+            "\nProvide a filepath to the file by typing 'filepath' or give a hashed password by typing 'password': ")
         if user_input == "filepath":
             user_filepath = input("Provide a full filepath: ")
             try:
@@ -160,6 +160,7 @@ def main():
             print("Password min length: {}".format(minlength))
             break
 
+    # Ask for the password min and max length
     while(1):
         maxlength = input("Give password maximum length (int): ")
         if maxlength.isnumeric():
@@ -189,14 +190,19 @@ def main():
     print(test_hash5)
     '''
 
+    # If wordlists are added (True) then go through the wordlists before starting brute forcing
     if wordlist_flag:
         print("Checking provided wordlists against the hashes first...\n")
+
+        # Iterate through the whole wordlist container and transform them into SHA1 and compare them into the
+        # given password hashes.
         for wordlist_line in wordlists_container:
             wordlist_line_hash = hashlib.sha1(
                 bytes(wordlist_line, 'ascii')).hexdigest()
             # print(
             # f"wordlist line: {wordlist_line}, wordlist hash: {wordlist_line_hash}")
             for password_hash in user_input_container:
+                # Compare the hashed wordlist words against the hashed passwords
                 if wordlist_line_hash == password_hash:
                     print(
                         "\n\n!------------------------------------------------------------------!\n")
@@ -208,14 +214,12 @@ def main():
                     brute_forced_password_hash = wordlist_line_hash
                     found_password_dict[password_hash] = brute_forced_password
                     # break
-                else:
-                    n = n + 1
-                    continue
-                if len(found_password_dict) == len(user_input_container):
+                elif len(found_password_dict) == len(user_input_container):
+                    # Break the loop if all the given passwords are cracked
                     break
                 else:
                     continue
-    print("\nContinuing to brute forcing...\n")
+        print("\nContinuing to brute forcing...\n")
 
     # Looping attempts and testing if it matches the given hash
     for attempt in bruteforce(ascii_charset, minlength, maxlength):
@@ -225,6 +229,7 @@ def main():
         attempt_hash = hashlib.sha1(bytes(attempt, 'ascii')).hexdigest()
         # print(attempt)
         for password_hash in user_input_container:
+            # Compare the hashed guesses against the hashed passwords
             if attempt_hash == password_hash:
                 print(
                     "\n\n!------------------------------------------------------------------!\n")
@@ -239,6 +244,7 @@ def main():
             else:
                 n = n + 1
                 continue
+        # Break the loop if all the given passwords are cracked
         if len(found_password_dict) == len(user_input_container):
             break
         else:
@@ -248,12 +254,17 @@ def main():
 
     # print("Found hash: {}\nThe given hash: {}".format(
     #    attempt_hash, test_hash))
+
+    # Print out the found passowrds
     print("Dictionary of found passwords:")
     print(found_password_dict)
+
+    # Write the found passwords into a file
     print(f"\nWriting the passwords to a file named: {output_file_name}")
     with open(ROOT_DIR + '/output/' + output_file_name, 'w+') as ofile:
         ofile.write(json.dumps(found_password_dict))
     
+    # Close the program
     print("\n[!] CLOSING THE PROGRAM...\n\n")
 
 if __name__ == "__main__":
