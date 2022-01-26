@@ -4,9 +4,13 @@ from random import *
 from itertools import chain, product
 from sys import stdout
 import os
+import json
 
 # Ask for password hash
 # password_hash = input("Enter the password hash: ")
+
+# Get root directory
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Get all ASCII characters
 ascii_charset_all = string.printable
@@ -79,6 +83,7 @@ def main():
     wordlist_flag = False
 
     print("\nWelcome to hashed password brute forcer!\n")
+    print("Your root directory: {}\n".format(ROOT_DIR))
 
     # Ask if the user wants use wordlists
     while(1):
@@ -126,6 +131,7 @@ def main():
                     line = line.strip()
                     user_input_container.append(line)
                 print("File opened and read succesfully!\n")
+                user_hashed_file.close()
                 break
             except Exception as exc:
                 print(
@@ -161,6 +167,8 @@ def main():
         if isinstance(maxlength, int):
             print("Password max length: {}".format(maxlength))
             break
+    
+    output_file_name = input("Provide the name of the outputfile (add .txt to the end): ")
 
     print("\n!-------------------------------------------------!\n")
     print("Beginning to brute force...\n")
@@ -242,7 +250,11 @@ def main():
     #    attempt_hash, test_hash))
     print("Dictionary of found passwords:")
     print(found_password_dict)
-
+    print(f"\nWriting the passwords to a file named: {output_file_name}")
+    with open(ROOT_DIR + '/output/' + output_file_name, 'w+') as ofile:
+        ofile.write(json.dumps(found_password_dict))
+    
+    print("\n[!] CLOSING THE PROGRAM...\n\n")
 
 if __name__ == "__main__":
     main()
