@@ -231,7 +231,8 @@ def main():
     # Looping attempts and testing if it matches the given hash
     try:
         for attempt in bruteforce(ascii_charset, minlength, maxlength):
-            stdout.write("\r%d attempts" % n)
+            # stdout.write("\r%d attempts" % n)
+            stdout.write("\r{} {}".format(n, attempt))
             stdout.flush()
             # Transform the attempt into a hash
             attempt_hash = hashlib.sha1(bytes(attempt, 'ascii')).hexdigest()

@@ -115,7 +115,7 @@ def main():
 
     # Write the found passwords into a file
     print(f"\nWriting the passwords to a file named: {output_file_name}")
-    with open(ROOT_DIR + output_file_name, 'w+') as ofile:
+    with open(ROOT_DIR + '/' + output_file_name, 'w+') as ofile:
         ofile.write(json.dumps(found_password_dict))
     
     # Close the program
