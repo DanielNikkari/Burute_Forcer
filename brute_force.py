@@ -35,7 +35,7 @@ guess = ""
 def bruteforce(charset, minlength, maxlength):
     return (''.join(candidate)
             for candidate in chain.from_iterable(product(charset, repeat=i)
-                                                 for i in range(minlength - 1, maxlength + 1)))
+                                                 for i in range(minlength, maxlength + 1)))
 
 
 # import wordlists
@@ -235,7 +235,7 @@ def main():
             stdout.flush()
             # Transform the attempt into a hash
             attempt_hash = hashlib.sha1(bytes(attempt, 'ascii')).hexdigest()
-            # print(attempt)
+            # print("\n{}".format(attempt))
             for password_hash in user_input_container:
                 # Compare the hashed guesses against the hashed passwords
                 if attempt_hash == password_hash:

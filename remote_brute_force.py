@@ -35,7 +35,7 @@ guess = ""
 def bruteforce(charset, minlength, maxlength):
     return (''.join(candidate)
             for candidate in chain.from_iterable(product(charset, repeat=i)
-                                                 for i in range(minlength - 1, maxlength + 1)))
+                                                 for i in range(minlength, maxlength + 1)))
 
 
 def main():
@@ -77,7 +77,8 @@ def main():
     # Looping attempts and testing if it matches the given hash
     try:
         for attempt in bruteforce(ascii_charset_letters, minlength, maxlength):
-            stdout.write("\r%d attempts" % n)
+            #stdout.write("\r%d " % n)
+            stdout.write("\r{} {}".format(n, attempt))
             stdout.flush()
             # Transform the attempt into a hash
             attempt_hash = hashlib.sha1(bytes(attempt, 'ascii')).hexdigest()
